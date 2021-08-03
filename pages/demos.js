@@ -1,6 +1,6 @@
 import LazyLoad from 'react-lazy-load';
 import Slick from 'react-slick';
-import InnerImageZoom from 'react-inner-image-zoom';
+import InnerImageZoom from '../components/InnerImageZoom';
 import Layout from '../components/Layout';
 import Demo from '../components/Demo';
 import styles from './Demos.module.css';
