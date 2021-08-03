@@ -64,6 +64,9 @@ const InnerImageZoom = ({
 
     isTouch && setIsActive(true);
 
+    console.log('handle click');
+    console.log(zoomImg.current);
+
     if (zoomImg.current) {
       handleLoad({ target: zoomImg.current });
       zoomIn(e.pageX, e.pageY);
@@ -73,6 +76,8 @@ const InnerImageZoom = ({
   };
 
   const handleLoad = (e) => {
+    console.log('handle load');
+    console.log(e.target);
     zoomImg.current = e.target;
     zoomImg.current.setAttribute('width', zoomImg.current.naturalWidth * zoomScale);
     zoomImg.current.setAttribute('height', zoomImg.current.naturalHeight * zoomScale);
