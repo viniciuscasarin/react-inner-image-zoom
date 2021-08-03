@@ -64,9 +64,6 @@ const InnerImageZoom = ({
 
     isTouch && setIsActive(true);
 
-    console.log('handle click');
-    console.log(zoomImg.current);
-
     if (zoomImg.current) {
       handleLoad({ target: zoomImg.current });
       zoomIn(e.pageX, e.pageY);
@@ -76,14 +73,17 @@ const InnerImageZoom = ({
   };
 
   const handleLoad = (e) => {
-    console.log('handle load');
-    console.log(e.target);
     zoomImg.current = e.target;
     zoomImg.current.setAttribute('width', zoomImg.current.naturalWidth * zoomScale);
     zoomImg.current.setAttribute('height', zoomImg.current.naturalHeight * zoomScale);
 
     imgProps.current.bounds = getBounds(img.current, false);
     imgProps.current.ratios = getRatios(imgProps.current.bounds, zoomImg.current);
+
+    console.log('Bounds');
+    console.log(imgProps.current.bounds);
+    console.log('Ratios')
+    console.log(imgProps.current.ratios);
 
     if (imgProps.current.onLoadCallback) {
       imgProps.current.onLoadCallback();
@@ -109,6 +109,9 @@ const InnerImageZoom = ({
       zoomImg.current.offsetLeft,
       zoomImg.current.offsetTop
     );
+
+    console.log('Offsets');
+    console.log(imgProps.current.offsets);
 
     setIsDragging(true);
 
