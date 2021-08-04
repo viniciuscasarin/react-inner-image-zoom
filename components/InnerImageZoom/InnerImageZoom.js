@@ -78,6 +78,10 @@ const InnerImageZoom = ({
     zoomImg.current.setAttribute('height', zoomImg.current.naturalHeight * zoomScale);
 
     imgProps.current.bounds = getBounds(img.current, false);
+    console.log('Zoom');
+    console.log(zoomImg.current);
+    console.log('Bounds');
+    console.log(imgProps.current.bounds);
     imgProps.current.ratios = getRatios(imgProps.current.bounds, zoomImg.current);
 
     console.log('Bounds');
