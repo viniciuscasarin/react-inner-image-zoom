@@ -73,18 +73,15 @@ const InnerImageZoom = ({
   };
 
   const handleLoad = (e) => {
-    const scaledDimensions = {
-      width: e.target.naturalWidth * zoomScale,
-      height: e.target.naturalHeight * zoomScale
-    };
+    const scaledDimensions = getScaledDimensions(e.target, zoomScale);
 
     zoomImg.current = e.target;
     zoomImg.current.setAttribute('width', scaledDimensions.width);
     zoomImg.current.setAttribute('height', scaledDimensions.height);
 
+    imgProps.current.scaledDimensions = scaledDimensions;
     imgProps.current.bounds = getBounds(img.current, false);
     imgProps.current.ratios = getRatios(imgProps.current.bounds, scaledDimensions);
-    console.log(imgProps.current.ratios);
 
     if (imgProps.current.onLoadCallback) {
       imgProps.current.onLoadCallback();
@@ -124,11 +121,9 @@ const InnerImageZoom = ({
   const handleDragMove = useCallback((e) => {
     let left = (e.pageX || e.changedTouches[0].pageX) - imgProps.current.offsets.x;
     let top = (e.pageY || e.changedTouches[0].pageY) - imgProps.current.offsets.y;
-    console.log('DRAGMOVE');
-    console.log(left);
-    console.log(zoomImg.current.offsetWidth);
-    left = Math.max(Math.min(left, 0), (zoomImg.current.offsetWidth - imgProps.current.bounds.width) * -1);
-    top = Math.max(Math.min(top, 0), (zoomImg.current.offsetHeight - imgProps.current.bounds.height) * -1);
+
+    left = Math.max(Math.min(left, 0), (imgProps.current.scaledDimensions.width - imgProps.current.bounds.width) * -1);
+    top = Math.max(Math.min(top, 0), (imgProps.current.scaledDimensions.height - imgProps.current.bounds.height) * -1);
 
     setLeft(left);
     setTop(top);
@@ -150,17 +145,20 @@ const InnerImageZoom = ({
 
   const handleClose = () => {
     zoomOut(() => {
-      setTimeout(() => {
-        if ((zoomPreload && isTouch) || !zoomPreload) {
-          zoomImg.current = null;
-          imgProps.current = getDefaults();
-          setIsActive(false);
-        }
+      setTimeout(
+        () => {
+          if ((zoomPreload && isTouch) || !zoomPreload) {
+            zoomImg.current = null;
+            imgProps.current = getDefaults();
+            setIsActive(false);
+          }
 
-        setIsTouch(false);
-        setIsFullscreen(false);
-        setCurrentMoveType(moveType);
-      }, isFullscreen ? 0 : fadeDuration);
+          setIsTouch(false);
+          setIsFullscreen(false);
+          setCurrentMoveType(moveType);
+        },
+        isFullscreen ? 0 : fadeDuration
+      );
     });
   };
 
@@ -213,7 +211,8 @@ const InnerImageZoom = ({
       bounds: {},
       offsets: {},
       ratios: {},
-      eventPosition: {}
+      eventPosition: {},
+      scaledDimensions: {}
     };
   };
 
@@ -246,6 +245,13 @@ const InnerImageZoom = ({
 
   const getFullscreenStatus = (fullscreenOnMobile, mobileBreakpoint) => {
     return fullscreenOnMobile && window.matchMedia && window.matchMedia(`(max-width: ${mobileBreakpoint}px)`).matches;
+  };
+
+  const getScaledDimensions = (zoomImg, zoomScale) => {
+    return {
+      width: zoomImg.naturalWidth * zoomScale,
+      height: zoomImg.naturalHeight * zoomScale
+    };
   };
 
   const zoomImageProps = {
