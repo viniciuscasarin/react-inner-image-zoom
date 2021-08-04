@@ -84,6 +84,7 @@ const InnerImageZoom = ({
 
     imgProps.current.bounds = getBounds(img.current, false);
     imgProps.current.ratios = getRatios(imgProps.current.bounds, scaledDimensions);
+    console.log(imgProps.current.ratios);
 
     if (imgProps.current.onLoadCallback) {
       imgProps.current.onLoadCallback();
