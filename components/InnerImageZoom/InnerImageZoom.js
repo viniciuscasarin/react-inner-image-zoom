@@ -73,12 +73,17 @@ const InnerImageZoom = ({
   };
 
   const handleLoad = (e) => {
+    const scaledDimensions = {
+      width: e.target.naturalWidth * zoomScale,
+      height: e.target.naturalHeight * zoomScale
+    };
+
     zoomImg.current = e.target;
-    zoomImg.current.setAttribute('width', zoomImg.current.naturalWidth * zoomScale);
-    zoomImg.current.setAttribute('height', zoomImg.current.naturalHeight * zoomScale);
+    zoomImg.current.setAttribute('width', scaledDimensions.width);
+    zoomImg.current.setAttribute('height', scaledDimensions.height);
 
     imgProps.current.bounds = getBounds(img.current, false);
-    imgProps.current.ratios = getRatios(imgProps.current.bounds, zoomImg.current);
+    imgProps.current.ratios = getRatios(imgProps.current.bounds, scaledDimensions);
 
     if (imgProps.current.onLoadCallback) {
       imgProps.current.onLoadCallback();
@@ -104,9 +109,6 @@ const InnerImageZoom = ({
       zoomImg.current.offsetLeft,
       zoomImg.current.offsetTop
     );
-
-    console.log('Offsets');
-    console.log(imgProps.current.offsets);
 
     setIsDragging(true);
 
@@ -232,15 +234,13 @@ const InnerImageZoom = ({
     };
   };
 
-  const getRatios = (bounds, zoomImg) => {
+  const getRatios = (bounds, dimensions) => {
     console.log('GET RATIOS');
     console.log(bounds);
-    console.log(zoomImg.offsetWidth);
-    console.log(zoomImg.naturalWidth);
-    console.log(zoomImg.width);
+    console.log(dimensions);
     return {
-      x: (zoomImg.width - bounds.width) / bounds.width,
-      y: (zoomImg.height - bounds.height) / bounds.height
+      x: (dimensions.width - bounds.width) / bounds.width,
+      y: (dimensions.height - bounds.height) / bounds.height
     };
   };
 
