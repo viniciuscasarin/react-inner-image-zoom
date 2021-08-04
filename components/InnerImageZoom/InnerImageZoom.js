@@ -124,7 +124,9 @@ const InnerImageZoom = ({
   const handleDragMove = useCallback((e) => {
     let left = (e.pageX || e.changedTouches[0].pageX) - imgProps.current.offsets.x;
     let top = (e.pageY || e.changedTouches[0].pageY) - imgProps.current.offsets.y;
-
+    console.log('DRAGMOVE');
+    console.log(left);
+    console.log(zoomImg.current.offsetWidth);
     left = Math.max(Math.min(left, 0), (zoomImg.current.offsetWidth - imgProps.current.bounds.width) * -1);
     top = Math.max(Math.min(top, 0), (zoomImg.current.offsetHeight - imgProps.current.bounds.height) * -1);
 
@@ -236,9 +238,6 @@ const InnerImageZoom = ({
   };
 
   const getRatios = (bounds, dimensions) => {
-    console.log('GET RATIOS');
-    console.log(bounds);
-    console.log(dimensions);
     return {
       x: (dimensions.width - bounds.width) / bounds.width,
       y: (dimensions.height - bounds.height) / bounds.height
